@@ -2,6 +2,7 @@ const anaSayfa=function(req, res, next) {
   res.render('mekanlar-liste',
     {
       'baslik': 'Anasayfa',
+      'footer': 'Mehmet Burak ŞİMŞEK 2020',
     'sayfaBaslik':{
       'siteAd':'Mekan32',
       'aciklama':'Isparta civarındaki mekanları keşfedin!'
@@ -53,6 +54,7 @@ const mekanBilgisi=function(req, res, next) {
     {
     'baslik': 'Mekan Bilgisi',
     'sayfaBaslik':'Starbucks',
+    'footer': 'Mehmet Burak ŞİMŞEK 2020',
     'mekanBilgisi':{
       'ad':'Starbucks',
       'adres':'Centrum Garden',
@@ -95,7 +97,7 @@ const mekanBilgisi=function(req, res, next) {
 
 
 const yorumEkle=function(req, res, next) {
-  res.render('yorum-ekle', { title: 'Yorum Ekle' });
+  res.render('yorum-ekle', { title: 'Yorum Ekle', 'footer': 'Mehmet Burak ŞİMŞEK 2020' });
 }
 
 module.exports={
