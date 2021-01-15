@@ -6,19 +6,20 @@ const cevapOlustur = function(res, status, content){
 }
 
 const mekanlariListele = async(req, res) => {
-  
+  //url'den enlem ve boylam parametrelerini almalıyız
   var boylam = parseFloat(req.query.boylam);
   var enlem = parseFloat(req.query.enlem);
-  
+  //alınan parametrelerle nokta nesnesi oluşturmalıyız
   var nokta = {
     type: "Point",
     coordinates: [enlem, boylam]
   };
-  
+  //coğrafi seçeneklerin nesnesini oluşturmalıyız
   var geoOptions = {
     distanceField: "mesafe",
     spherical: true,
-    key: "koordinatlar"
+    key: "koordinatlar",
+    maxDistance: 20000
   };
   
   if(!enlem || !boylam){
@@ -40,7 +41,7 @@ const mekanlariListele = async(req, res) => {
       adres: mekan.adres,
       puan: mekan.puan,
       imkanlar: mekan.imkanlar,
-      mesafe: mekan.mesafe.toFixed() + ' m'
+      mesafe: mekan.mesafe.toFixed()
     }});
 
     cevapOlustur(res, 200, mekanlar);
@@ -57,15 +58,15 @@ const mekanEkle = function(req, res){
     imkanlar: req.body.imkanlar.split(","),
     koordinatlar: [parseFloat(req.body.enlem), parseFloat(req.body.boylam)],
     saatler: [{
-      gunler: req.body.gunler1,
-      acilis: req.body.acilis1,
-      kapanis: req.body.kapanis1,
-      kapali: req.body.kapali1
+      gunler: req.body.haftaici,
+      acilis: req.body.haftaiciacilis,
+      kapanis: req.body.haftaicikapanis,
+      kapali: req.body.haftaicikapali
     },{
-      gunler: req.body.gunler2,
-      acilis: req.body.acilis2,
-      kapanis: req.body.kapanis2,
-      kapali: req.body.kapali2
+      gunler: req.body.cumartesi,
+      acilis: req.body.cumartesiacilis,
+      kapanis: req.body.cumartesikapanis,
+      kapali: req.body.cumartesikapali
     }]
   }, function(hata, mekan){
     if(hata){
@@ -100,7 +101,7 @@ const mekanGuncelle = function(req, res){
     return;
   }
   Mekan.findById(req.params.mekanid)
-  
+  //- ile yazılan alanlar haricinde diğer her şeyin dahil edileceğini söyler
   .select('-yorumlar -puan')
   .exec(function(hata, gelenMekan){
     if(!gelenMekan){
@@ -116,15 +117,15 @@ const mekanGuncelle = function(req, res){
     gelenMekan.imkanlar = req.body.imkanlar.split(",");
     gelenMekan.koordinatlar = [parseFloat(req.body.enlem), parseFloat(req.body.boylam)];
     gelenMekan.saatler = [{
-      gunler: req.body.gunler1,
-      acilis: req.body.acilis1,
-      kapanis: req.body.kapanis1,
-      kapali: req.body.kapali1,
+      gunler: req.body.haftaici,
+      acilis: req.body.haftaiciacilis,
+      kapanis: req.body.haftaicikapanis,
+      kapali: req.body.haftaicikapali
     }, {
-      gunler: req.body.gunler2,
-      acilis: req.body.acilis2,
-      kapanis: req.body.kapanis2,
-      kapali: req.body.kapali2,
+      gunler: req.body.cumartesi,
+      acilis: req.body.cumartesiacilis,
+      kapanis: req.body.cumartesikapanis,
+      kapali: req.body.cumartesikapali
     }];
     gelenMekan.save(function(hata, mekan){
       if(hata){
